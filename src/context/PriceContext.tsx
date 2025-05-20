@@ -13,7 +13,13 @@ type PriceContextType = {
   setRange: (r: ChartRange) => void;
 };
 
-export const PriceContext = createContext<PriceContextType>({} as any);
+export const PriceContext = createContext<PriceContextType>({
+  summary: undefined,
+  chartData: undefined,
+  isLoading: false,
+  range: '1d',
+  setRange: () => {},
+});
 
 export function PriceProvider({ children }: { children: ReactNode }) {
   const [range, setRange] = React.useState<ChartRange>('1d');

@@ -14,11 +14,11 @@ export const fetchSummary = async (): Promise<PriceSummary> => {
 export const fetchChart = async (
   range: '1h' | '1d' | '1m',
 ): Promise<PricePoint[]> => {
-  const endpoints = {
-    '1h': '/chart/1h',
-    '1d': '/chart/1d',
-    '1m': '/chart/1m',
-  } as const;
+  // const endpoints = {
+  //   '1h': '/chart/1h',
+  //   '1d': '/chart/1d',
+  //   '1m': '/chart/1m',
+  // } as const;
 
   // Uncomment the following lines when a real API is available
   // const response = await client.get(endpoints[range]);
@@ -31,5 +31,6 @@ export const fetchChart = async (
   return Array.from({ length }).map((_, i) => ({
     timestamp: now - (length - i) * interval,
     price: 63000 + 500 * Math.sin((i / length) * Math.PI * 2),
+    volume: Math.floor(Math.random() * 1000),
   }));
 };
