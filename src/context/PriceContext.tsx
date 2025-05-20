@@ -1,39 +1,26 @@
 import React, { createContext, ReactNode } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchSummary, fetchChart } from '@/services/api';
-import type { PriceSummary, PricePoint } from '@/types/price';
-
-type ChartRange = '1h' | '1d' | '1m';
+import usePriceData from '@/hooks/usePriceData';
+import type { PriceSummary, PricePoint, PriceRange } from '@/types/price';
 
 type PriceContextType = {
   summary?: PriceSummary;
   chartData?: PricePoint[];
   isLoading: boolean;
-  range: ChartRange;
-  setRange: (r: ChartRange) => void;
+  range: PriceRange;
+  setRange: (r: PriceRange) => void;
 };
 
 export const PriceContext = createContext<PriceContextType>({} as any);
 
 export function PriceProvider({ children }: { children: ReactNode }) {
-  const [range, setRange] = React.useState<ChartRange>('1d');
-  const summaryQuery = useQuery<PriceSummary>({
-    queryKey: ['summary'],
-    queryFn: fetchSummary,
-  });
-
-  const chartQuery = useQuery<PricePoint[]>({
-    queryKey: ['chart', range],
-    queryFn: () => fetchChart(range),
-  });
-
-  const isLoading = summaryQuery.isLoading || chartQuery.isLoading;
+  const [range, setRange] = React.useState<PriceRange>('1w');
+  const { summary, chartData, isLoading } = usePriceData(range);
 
   return (
     <PriceContext.Provider
       value={{
-        summary: summaryQuery.data,
-        chartData: chartQuery.data,
+        summary,
+        chartData,
         isLoading,
         range,
         setRange,
