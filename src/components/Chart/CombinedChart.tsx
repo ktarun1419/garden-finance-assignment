@@ -64,18 +64,18 @@ export default function CombinedChart({ data }: Props) {
             </linearGradient>
           </defs>
 
-          <CartesianGrid stroke="#eee" vertical={false} />
+          <CartesianGrid stroke="#E2E4E7" vertical={false} />
 
           <XAxis
             dataKey="timestamp"
-            axisLine={true}
+            axisLine={false}
             tickLine={false}
             tick={isFull}
             tickFormatter={isFull ? (ts) => new Date(ts).toLocaleTimeString() : undefined}
           />
           <YAxis
             yAxisId="price"
-            axisLine={true}
+            axisLine={false}
             tickLine={false}
             tick={isFull}
             tickFormatter={isFull ? (n) => `$${n.toFixed(0)}` : undefined}
@@ -100,7 +100,7 @@ export default function CombinedChart({ data }: Props) {
 
           {/* volume bars */}
           
-          <Bar yAxisId="price" dataKey="price" barSize={1} fill="#413ea0" />
+          <Bar yAxisId="price" dataKey="price" barSize={4} fill="#E2E4E7" />
 
           {/* shaded area under price */}
           <Area
@@ -116,7 +116,7 @@ export default function CombinedChart({ data }: Props) {
             yAxisId="price"
             type="monotone"
             dataKey="price"
-            stroke="#5c6bc0"
+            stroke="#4B40EE"
             dot={false}
             strokeWidth={2}
           />
@@ -133,7 +133,7 @@ export default function CombinedChart({ data }: Props) {
             x={last.timestamp}
             y={last.price}
             r={6}
-            fill="#5c6bc0"
+            fill="#4B40EE"
             stroke="none"
             label={() => {
               const text = `$${last.price.toFixed(2)}`;

@@ -20,7 +20,6 @@ export const Price = styled.h1`
 `;
 
 export const Change = styled.span<{ positive: boolean }>`
-  margin-left: 1rem;
   color: ${({ positive }) => (positive ? '#67BF6B' : 'red')};
   font-size: 18px;
   font-weight: 400;
