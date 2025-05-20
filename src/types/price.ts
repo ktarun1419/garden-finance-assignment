@@ -9,5 +9,6 @@ export interface PriceSummary {
 export interface PricePoint {
     timestamp: number;
     price: number;
+    volume: number;
 }
   

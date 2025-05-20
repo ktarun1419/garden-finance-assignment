@@ -27,10 +27,9 @@ export const Change = styled.span<{ positive: boolean }>`
 `;
 
 export const PriceWithSymbol = styled.div`
-   display: flex;
-   align-items: flex-start;
-
-`
+  display: flex;
+  align-items: baseline;
+`;
 
 export const Symbol = styled.h4`
 color:#BDBEBF;

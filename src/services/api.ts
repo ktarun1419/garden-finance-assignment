@@ -54,9 +54,13 @@ export const fetchChart = async (
       },
     });
 
-    return (data.prices as [number, number][]).map(([timestamp, price]) => ({
+    const prices = data.prices as [number, number][];
+    const volumes = data.total_volumes as [number, number][];
+
+    return prices.map(([timestamp, price], idx) => ({
       timestamp,
       price,
+      volume: volumes[idx]?.[1] ?? 0,
     }));
   } catch (err) {
     console.error('Failed to fetch chart', err);

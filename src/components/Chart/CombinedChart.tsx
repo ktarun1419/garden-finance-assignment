@@ -136,18 +136,12 @@ export default function CombinedChart({ data }: Props) {
               const w = text.length * fs * 0.6 + pad * 2;
               const h = fs + pad;
               return (
-                <g>
-                  <rect
-                    x={8}
-                    y={h/2}
-                    width={w}
-                    height={h}
-                    rx={4}
-                    fill="#5c6bc0"
-                  />
+                <g transform={`translate(8,-${h})`}>
+                  <rect width={w} height={h} rx={4} fill="#5c6bc0" />
                   <text
-                    x={ 8 + pad}
-                    y={fs/3}
+                    x={pad}
+                    y={h / 2}
+                    dominantBaseline="middle"
                     fill="#fff"
                     fontSize={fs}
                     fontFamily="Circular Std, sans-serif"

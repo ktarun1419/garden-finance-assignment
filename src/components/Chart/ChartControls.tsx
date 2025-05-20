@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { PriceContext } from '@/context/PriceContext';
 import { ControlsWrapper, RangeButton } from './Chart.styles';
 
-const ranges = ['1h', '1d', '1m'] as const;
+const ranges = ['1d', '1w', '1m'] as const;
 
 export default function ChartControls() {
   const { range, setRange } = useContext(PriceContext);
