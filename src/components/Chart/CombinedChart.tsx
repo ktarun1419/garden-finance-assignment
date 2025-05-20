@@ -46,7 +46,7 @@ export default function CombinedChart({ data }: Props) {
   const last = data[data.length - 1];
 
   return (
-    <ChartWrapper ref={ref}>
+    <ChartWrapper ref={ref} isFull={isFull}>
       <Toolbar>
         <ChartControls />
         <FullscreenButton onClick={toggleFull}>

@@ -14,7 +14,6 @@ export default function Analysis() {
 
   return (
     <div>
-      <h1>Analysis</h1>
       <PriceChart data={chartData} />
       <p>The overall trend for this period is {trend} with a {changePct.toFixed(2)}% change.</p>
     </div>
