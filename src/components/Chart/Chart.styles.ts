@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const ControlsWrapper = styled.div`
   display: flex;
   gap: 0.5rem;
-  padding: 1rem;
+  padding: 1rem 0rem;
 `;
 
 export const Toolbar = styled.div`
