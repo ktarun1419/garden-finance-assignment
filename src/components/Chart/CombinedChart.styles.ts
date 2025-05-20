@@ -22,6 +22,5 @@ export const FullscreenButton = styled.button`
 // wrap Recharts’ ResponsiveContainer so it can live in styled-components
 export const StyledResponsiveContainer = styled(ResponsiveContainer)<{ isFull: boolean }>`
   width: 100% !important;
-  flex: 1;
   height: ${({ isFull }) => (isFull ? '100%' : '450px')} !important;
 `;

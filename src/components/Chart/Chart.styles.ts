@@ -12,11 +12,6 @@ export const Toolbar = styled.div`
   align-items: center;
 `;
 
-export const Toolbar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
 
 export const RangeButton = styled.button<{ active: boolean }>`
   background: ${({ active }) => (active ? '#5c6bc0' : 'transparent')};

@@ -14,9 +14,10 @@ export default function Settings() {
   return (
     <div>
       <h1>Settings</h1>
-      <label>
+      <p>Coming soon ...</p>
+      {/* <label>
         <input type="checkbox" checked={darkMode} onChange={toggle} /> Enable dark mode
-      </label>
+      </label> */}
     </div>
   );
 }
