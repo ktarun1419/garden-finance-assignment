@@ -12,14 +12,24 @@ export const fetchSummary = async (): Promise<PriceSummary> => {
 };
 
 export const fetchChart = async (
-  range: '1d' | '3d' | '1w' | '1m' | '6m' | '1y' | 'max',
+  range: '1h' | '1d' | '1m',
 ): Promise<PricePoint[]> => {
-  // generate dummy sine chart:
-  console.log({range})
+  const endpoints = {
+    '1h': '/chart/1h',
+    '1d': '/chart/1d',
+    '1m': '/chart/1m',
+  } as const;
+
+  // Uncomment the following lines when a real API is available
+  // const response = await client.get(endpoints[range]);
+  // return response.data;
+
+  // Fallback: generate dummy sine chart
   const now = Date.now();
-  return Array.from({ length: 50 }).map((_, i) => ({
-    timestamp: now - (50 - i) * 3600 * 1000,
-    price: 63000 + 500 * Math.sin((i / 50) * Math.PI * 2),
-    volume: 1000 + Math.floor(500 * (1 + Math.sin((i / 50) * Math.PI * 2))),
+  const length = range === '1h' ? 60 : range === '1d' ? 24 : 30;
+  const interval = 3600 * 1000;
+  return Array.from({ length }).map((_, i) => ({
+    timestamp: now - (length - i) * interval,
+    price: 63000 + 500 * Math.sin((i / length) * Math.PI * 2),
   }));
 };
