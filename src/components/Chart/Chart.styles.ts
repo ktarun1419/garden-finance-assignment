@@ -6,6 +6,12 @@ export const ControlsWrapper = styled.div`
   padding: 1rem;
 `;
 
+export const Toolbar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const RangeButton = styled.button<{ active: boolean }>`
   background: ${({ active }) => (active ? '#5c6bc0' : 'transparent')};
   color: ${({ active }) => (active ? '#fff' : '#555')};
