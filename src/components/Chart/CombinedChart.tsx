@@ -130,7 +130,7 @@ export default function CombinedChart({ data }: Props) {
             r={6}
             fill="#5c6bc0"
             stroke="none"
-            label={({ x, y }) => {
+            label={() => {
               const text = `$${last.price.toFixed(2)}`;
               const pad = 6, fs = 12;
               const w = text.length * fs * 0.6 + pad * 2;

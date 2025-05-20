@@ -1,12 +1,21 @@
 import React from 'react';
 import { useContext } from 'react';
 import { PriceContext } from '@/context/PriceContext';
+import Skeleton from '@/components/Skeleton';
 import { HeaderWrapper, Price, Change, PriceWithSymbol, Symbol } from './PriceHeader.styles';
 
 export default function PriceHeader() {
   const { summary, isLoading } = useContext(PriceContext);
 
-  if (isLoading || !summary) return <HeaderWrapper>Loading...</HeaderWrapper>;
+  if (isLoading || !summary)
+    return (
+      <HeaderWrapper>
+        <PriceWithSymbol>
+          <Skeleton width="200px" height="70px" />
+        </PriceWithSymbol>
+        <Skeleton width="120px" height="24px" />
+      </HeaderWrapper>
+    );
 
   return (
     <HeaderWrapper>

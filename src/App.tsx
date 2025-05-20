@@ -1,4 +1,4 @@
-import { Routes, Route, NavLink } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { PriceProvider } from '@/context/PriceContext';
 import Summary from '@/pages/Summary';
 import ChartPage from '@/pages/ChartPage';
