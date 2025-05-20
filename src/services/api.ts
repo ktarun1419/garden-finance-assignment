@@ -1,5 +1,5 @@
 // import axios from 'axios';
-import type { PricePoint, PriceSummary } from '@/types/price';
+import type { PricePoint, PriceSummary, PriceRange } from '@/types/price';
 
 // const client = axios.create({
 //   baseURL: 'https://api.example.com', // replace when you have real API
@@ -12,7 +12,7 @@ export const fetchSummary = async (): Promise<PriceSummary> => {
 };
 
 export const fetchChart = async (
-  range: '1d' | '3d' | '1w' | '1m' | '6m' | '1y' | 'max',
+  range: PriceRange,
 ): Promise<PricePoint[]> => {
   // generate dummy sine chart:
   console.log({range})
