@@ -12,7 +12,7 @@ export default function usePriceData(range: PriceRange) {
   const chartQuery = useQuery<PricePoint[]>({
     queryKey: ['chart', range],
     queryFn: () => fetchChart(range),
-    keepPreviousData: true,
+    // keepPreviousData: true,
     staleTime: 60 * 1000, // cache for 1 minute
   });
 

@@ -19,8 +19,8 @@ export function PriceProvider({ children }: { children: ReactNode }) {
   return (
     <PriceContext.Provider
       value={{
-        summary,
-        chartData,
+        summary: summary,
+        chartData: chartData,
         isLoading,
         range,
         setRange,
