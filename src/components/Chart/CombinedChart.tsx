@@ -19,6 +19,8 @@ import {
   FullscreenButton,
   StyledResponsiveContainer as Container,
 } from './CombinedChart.styles';
+import ChartControls from './ChartControls';
+import { Toolbar } from './Chart.styles';
 
 interface Props {
   data: PricePoint[];
@@ -45,11 +47,14 @@ export default function CombinedChart({ data }: Props) {
 
   return (
     <ChartWrapper ref={ref}>
-      <FullscreenButton onClick={toggleFull}>
-        {isFull ? 'Exit Fullscreen' : 'Fullscreen'}
-      </FullscreenButton>
+      <Toolbar>
+        <ChartControls />
+        <FullscreenButton onClick={toggleFull}>
+          {isFull ? 'Exit Fullscreen' : 'Fullscreen'}
+        </FullscreenButton>
+      </Toolbar>
 
-      <Container>
+      <Container isFull={isFull}>
         <ComposedChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
           {/* gradient for area */}
           <defs>
