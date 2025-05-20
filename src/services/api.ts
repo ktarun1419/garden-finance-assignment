@@ -1,24 +1,65 @@
-// import axios from 'axios';
+import axios from 'axios';
 import type { PricePoint, PriceSummary } from '@/types/price';
 
-// const client = axios.create({
-//   baseURL: 'https://api.example.com', // replace when you have real API
-//   timeout: 5000,
-// });
+const client = axios.create({
+  baseURL: 'https://api.coingecko.com/api/v3',
+  timeout: 5000,
+});
 
 export const fetchSummary = async (): Promise<PriceSummary> => {
-  // dummy until real API arrives:
-  return { current: 63179.71, change: 2161.42, changePct: 3.54 };
+  try {
+    const { data } = await client.get('/coins/bitcoin', {
+      params: {
+        localization: false,
+        tickers: false,
+        market_data: true,
+        community_data: false,
+        developer_data: false,
+        sparkline: false,
+      },
+    });
+
+    const current = data.market_data.current_price.usd as number;
+    const change =
+      data.market_data.price_change_24h_in_currency.usd as number;
+    const changePct =
+      data.market_data.price_change_percentage_24h_in_currency
+        .usd as number;
+
+    return { current, change, changePct };
+  } catch (err) {
+    console.error('Failed to fetch summary', err);
+    throw new Error('Failed to fetch summary');
+  }
 };
 
 export const fetchChart = async (
   range: '1d' | '3d' | '1w' | '1m' | '6m' | '1y' | 'max',
 ): Promise<PricePoint[]> => {
-  // generate dummy sine chart:
-  console.log({range})
-  const now = Date.now();
-  return Array.from({ length: 50 }).map((_, i) => ({
-    timestamp: now - (50 - i) * 3600 * 1000,
-    price: 63000 + 500 * Math.sin((i / 50) * Math.PI * 2),
-  }));
+  const dayMap = {
+    '1d': 1,
+    '3d': 3,
+    '1w': 7,
+    '1m': 30,
+    '6m': 180,
+    '1y': 365,
+    max: 'max',
+  } as const;
+
+  try {
+    const { data } = await client.get('/coins/bitcoin/market_chart', {
+      params: {
+        vs_currency: 'usd',
+        days: dayMap[range],
+      },
+    });
+
+    return (data.prices as [number, number][]).map(([timestamp, price]) => ({
+      timestamp,
+      price,
+    }));
+  } catch (err) {
+    console.error('Failed to fetch chart', err);
+    throw new Error('Failed to fetch chart');
+  }
 };
