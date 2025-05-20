@@ -95,7 +95,7 @@ export default function CombinedChart({ data }: Props) {
 
           {/* volume bars */}
           
-          <Bar yAxisId="price" dataKey="volume" barSize={20} fill="#413ea0" />
+          <Bar yAxisId="volume" dataKey="volume" barSize={20} fill="#413ea0" />
 
           {/* shaded area under price */}
           <Area
