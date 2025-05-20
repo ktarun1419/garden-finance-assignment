@@ -20,5 +20,6 @@ export const fetchChart = async (
   return Array.from({ length: 50 }).map((_, i) => ({
     timestamp: now - (50 - i) * 3600 * 1000,
     price: 63000 + 500 * Math.sin((i / 50) * Math.PI * 2),
+    volume: 1000 + Math.floor(500 * (1 + Math.sin((i / 50) * Math.PI * 2))),
   }));
 };
