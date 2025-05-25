@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { ResponsiveContainer } from 'recharts';
-
-export const ChartWrapper = styled.div<{ isFull?: boolean }>`
+export const ChartWrapper = styled.div `
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -11,8 +10,7 @@ export const ChartWrapper = styled.div<{ isFull?: boolean }>`
   height: ${({ isFull }) => (isFull ? '100vh' : 'auto')};
   box-sizing: border-box;
 `;
-
-export const FullscreenButton = styled.button`
+export const FullscreenButton = styled.button `
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -27,10 +25,8 @@ export const FullscreenButton = styled.button`
     background: rgba(0, 0, 0, 0.1);
   }
 `;
-
-export const CompareButton = styled(FullscreenButton)``;
-
-export const StyledResponsiveContainer = styled(ResponsiveContainer)<{ isFull?: boolean }>`
+export const CompareButton = styled(FullscreenButton) ``;
+export const StyledResponsiveContainer = styled(ResponsiveContainer) `
   width:${({ isFull }) => (isFull ? '100%' : '80%')} !important;
   height: ${({ isFull }) => (isFull ? '100%' : '450px')} !important;
   padding: ${({ isFull }) => (isFull ? '0rem' : '0')}

@@ -52,32 +52,22 @@ export default function CombinedChartECharts({ data }: Props) {
     const maxP  = Math.max(...ps);
     const pad   = (maxP - minP) * 0.05;
     const maxV  = Math.max(...vs) * 1.1;
-
+    const lastPrice = ps[ps.length - 1];
+  
     return {
       grid: [
-        { left: 0, right: 0, top: 40,    height: '90%' },  // price panel
-        { left: 0, right: 0, bottom: 10, height: '10%' },  // volume panel
+        { left: 0, right: 0, top: 40,    height: '90%' },
+        { left: 0, right: 0, bottom: 10, height: '10%' },
       ],
       xAxis: [
         {
-          gridIndex: 0,
-          type: 'time',
-          min: first,
-          max: last,
-          splitLine: {
-            show: true,
-            lineStyle: { color: '#E2E4E7' },
-          },
-          splitNumber: 5,
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: { show: false },
+          gridIndex: 0, type: 'time', min: first, max: last,
+          splitLine: { show: true, lineStyle: { color: '#E2E4E7' } },
+          splitNumber: 5, axisLine: { show: false },
+          axisTick: { show: false }, axisLabel: { show: false },
         },
         {
-          gridIndex: 1,
-          type: 'time',
-          min: first,
-          max: last,
+          gridIndex: 1, type: 'time', min: first, max: last,
           splitLine: { show: false },
           axisLine: { show: false },
           axisTick: { show: false },
@@ -86,29 +76,28 @@ export default function CombinedChartECharts({ data }: Props) {
       ],
       yAxis: [
         {
-            gridIndex: 0,
-            type: 'value',
-            position: 'right',   
-            min: minP - pad,
-            max: maxP + pad,
-            splitLine: { show: false },
-            axisLine: { show: false },
-            axisTick: { show: false },
-            axisLabel: { show: false },
-        
-            axisPointer: {
+          gridIndex: 0,
+          type: 'value',
+          position: 'right',
+          min: minP - pad,
+          max: maxP + pad,
+          splitLine: { show: false },
+          axisLine: { show: false },
+          axisTick: { show: false },
+          axisLabel: { show: false },
+          axisPointer: {
+            show: true,
+            label: {
               show: true,
-              label: {
-                show: true,
-                margin: 8,
-                backgroundColor: '#1A243A',
-                color: '#fff',
-                padding: [8, 12],
-                borderRadius: 4,
-                formatter: '${value}',    // display the current value
-              }
+              margin: 8,
+              backgroundColor: '#1A243A',
+              color: '#fff',
+              padding: [8, 12],
+              borderRadius: 4,
+              formatter: '{value}',
             }
-          },
+          }
+        },
         {
           gridIndex: 1,
           type: 'value',
@@ -126,17 +115,14 @@ export default function CombinedChartECharts({ data }: Props) {
         backgroundColor: 'rgba(255,255,255,0.9)',
         borderColor: '#E2E4E7',
         textStyle: { color: '#333' },
-        
-        position: (point, params, dom, rect, size) => {
-          const [mouseX, mouseY] = point as [number, number];
-          const boxWidth  = size.contentSize[0];
-          const viewWidth = size.viewSize[0];
-        
-          const x = mouseX + boxWidth + 10 < viewWidth
-            ? mouseX + 10
-            : mouseX - boxWidth - 10;
-          const y = mouseY + 10;
-          return [x, y];
+        position: (point, _, dom, _1, size) => {
+          const [x, y] = point as [number, number];
+          const w      = size.contentSize[0];
+          const vw     = size.viewSize[0];
+          return [
+            x + w + 10 < vw ? x + 10 : x - w - 10,
+            y + 10
+          ];
         },
         formatter: items => {
           const pts = items as any[];
@@ -153,26 +139,24 @@ export default function CombinedChartECharts({ data }: Props) {
         },
       },
       series: [
-        // 1) Gradient area
         {
-            name: 'Price',
-            type: 'line',
-            xAxisIndex: 0,
-            yAxisIndex: 0,
-            showSymbol: false,
-            lineStyle: { opacity: 0 },
-            areaStyle: {
-              color: new echarts.graphic.LinearGradient(
-                0, 0, 0, 1,
-                [
-                    { offset: 0.65, color: '#E8E7FF' }, 
-                    { offset: 0.95, color: '#FFFFFF00' },
-                ]
-              ),
-            },
-            data: data.map(d => [d.timestamp, d.price]),
+          name: 'Price',
+          type: 'line',
+          xAxisIndex: 0,
+          yAxisIndex: 0,
+          showSymbol: false,
+          lineStyle: { opacity: 0 },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(
+              0, 0, 0, 1,
+              [
+                { offset: 0.65, color: '#E8E7FF' },
+                { offset: 0.95, color: '#FFFFFF00' },
+              ]
+            ),
           },
-        // 2) Outline line
+          data: data.map(d => [d.timestamp, d.price]),
+        },
         {
           name: 'Price',
           type: 'line',
@@ -182,7 +166,6 @@ export default function CombinedChartECharts({ data }: Props) {
           lineStyle: { color: '#4B40EE', width: 2 },
           data: data.map(d => [d.timestamp, d.price]),
         },
-        
         {
           name: 'Last Price',
           type: 'line',
@@ -190,32 +173,30 @@ export default function CombinedChartECharts({ data }: Props) {
           yAxisIndex: 0,
           showSymbol: false,
           data: [
-            [first, ps[ps.length - 1]],
-            [last,  ps[ps.length - 1]],
+            [first, lastPrice],
+            [last,  lastPrice],
           ],
-          lineStyle: { type: 'dashed', color: '#999999' , width:1 },
+          lineStyle: { type: 'dashed', color: '#999999', width: 1 },
           markPoint: {
-           symbol: false,
-           symbolSize: 0,
+            symbol: 'none',       // hide balloon/pin
+            silent: true,
             data: [{
-              coord: [last, ps[ps.length - 1]],
-              value: `$${ps[ps.length - 1].toFixed(2)}`,
-              itemStyle: { color: '#4B40EE' },
+              name: 'Last Price',                  // required by TS
+              coord: [last, lastPrice],
+              value: lastPrice,
               label: {
                 show: true,
-                position: 'left',
-                offset: [5, 4], 
+                position: 'top',
+                offset: [0, -8],
                 color: '#fff',
                 backgroundColor: '#4B40EE',
                 borderRadius: 4,
                 padding: [8, 12],
-                
+                formatter: `$${lastPrice.toFixed(2)}`,  // draw only the tag
               },
             }],
-            silent: true,
           },
         },
-        // 4) Volume bars (bottom panel)
         {
           name: 'Volume',
           type: 'bar',
@@ -228,8 +209,9 @@ export default function CombinedChartECharts({ data }: Props) {
         },
       ],
       padding: 0,
-    };
+    } as echarts.EChartsOption;
   }, [data]);
+  
 
   return (
     <ChartWrapper ref={wrapperRef} isFull={isFull}>
