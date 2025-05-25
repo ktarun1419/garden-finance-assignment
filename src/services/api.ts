@@ -60,7 +60,7 @@ export const fetchChart = async (
     return prices.map(([timestamp, price], idx) => ({
       timestamp,
       price,
-      volume: volumes[idx]?.[1] ?? 0,
+      volume: Number(volumes[idx]?.[1] || 0) / 100000,
     }));
   } catch (err) {
     console.error('Failed to fetch chart', err);

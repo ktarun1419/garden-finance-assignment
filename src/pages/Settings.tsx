@@ -1,15 +1,15 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 
 export default function Settings() {
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('darkMode') === 'true';
-  });
+  // const [darkMode, setDarkMode] = useState(() => {
+  //   return localStorage.getItem('darkMode') === 'true';
+  // });
 
-  const toggle = () => {
-    const next = !darkMode;
-    setDarkMode(next);
-    localStorage.setItem('darkMode', String(next));
-  };
+  // const toggle = () => {
+  //   const next = !darkMode;
+  //   setDarkMode(next);
+  //   localStorage.setItem('darkMode', String(next));
+  // };
 
   return (
     <div>

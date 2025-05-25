@@ -12,15 +12,21 @@ import {
   Tooltip,
   ReferenceDot,
   ReferenceLine,
+  Customized,
 } from 'recharts';
 import type { PricePoint } from '@/types/price';
+
 import {
   ChartWrapper,
   FullscreenButton,
   StyledResponsiveContainer as Container,
+  CompareButton,
 } from './CombinedChart.styles';
 import ChartControls from './ChartControls';
-import { Toolbar } from './Chart.styles';
+import { Toolbar, ToolbarRight } from './Chart.styles';
+import { FullscreenIcon } from '@/assets/fullscreen';
+import { CompareIcon } from '@/assets/compare';
+import CustomTooltip from './CustomTooltip';
 
 interface Props {
   data: PricePoint[];
@@ -29,6 +35,8 @@ interface Props {
 export default function CombinedChart({ data }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [isFull, setIsFull] = useState(false);
+
+  console.log({ data });
 
   useEffect(() => {
     if (!screenfull.isEnabled) return;
@@ -48,19 +56,27 @@ export default function CombinedChart({ data }: Props) {
   return (
     <ChartWrapper ref={ref} isFull={isFull}>
       <Toolbar>
+        <ToolbarRight>
+          <FullscreenButton onClick={toggleFull}>
+            <FullscreenIcon />
+            {isFull ? 'Exit Fullscreen' : 'Fullscreen'}
+          </FullscreenButton>
+          <CompareButton>
+            <CompareIcon />
+            Compare
+          </CompareButton>
+        </ToolbarRight>
+
         <ChartControls />
-        <FullscreenButton onClick={toggleFull}>
-          {isFull ? 'Exit Fullscreen' : 'Fullscreen'}
-        </FullscreenButton>
       </Toolbar>
 
       <Container isFull={isFull}>
-        <ComposedChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+        <ComposedChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }} barCategoryGap="0%"  barGap="0"        >
           {/* gradient for area */}
           <defs>
             <linearGradient id="priceGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#5c6bc0" stopOpacity={0.6}/>
-              <stop offset="95%" stopColor="#5c6bc0" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#5c6bc0" stopOpacity={0.6} />
+              <stop offset="95%" stopColor="#5c6bc0" stopOpacity={0} />
             </linearGradient>
           </defs>
 
@@ -68,41 +84,49 @@ export default function CombinedChart({ data }: Props) {
 
           <XAxis
             dataKey="timestamp"
-            axisLine={false}
-            tickLine={false}
+            axisLine={{ stroke: '#E2E4E7' }}
+            tickLine={{ stroke: '#E2E4E7', strokeWidth: 1 }}
             tick={isFull}
+            
+            scale="time"
+            tickCount={5}
             tickFormatter={isFull ? (ts) => new Date(ts).toLocaleTimeString() : undefined}
+            padding={{ left: 0, right: 0 }}
+            interval="preserveStartEnd"
+            // domain={['dataMin','dataMax']}  
           />
           <YAxis
             yAxisId="price"
-            axisLine={false}
-            tickLine={false}
+            axisLine={{ stroke: '#E2E4E7' }}
+            tickLine={{ stroke: '#E2E4E7' }}
             tick={isFull}
             tickFormatter={isFull ? (n) => `$${n.toFixed(0)}` : undefined}
-            domain={['auto','auto']}
+            domain={['auto', 'auto']}
+            interval="preserveStartEnd"
+            // domain={['dataMin','dataMax']}    
           />
           <YAxis
             yAxisId="volume"
             orientation="right"
-            axisLine={false}
+            axisLine={{ stroke: '#E2E4E7' }}
             tick={false}
-            domain={[0,'auto']}
+            height={10}
+            interval="preserveStartEnd"
+            domain={['dataMin','dataMax']}    
+            // domain={[0, (dataMax: number) => Math.max(dataMax, 1)]}
           />
 
-          <Tooltip
-            formatter={(val, name) =>
-              name === 'price'
-                ? [`$${(val as number).toFixed(2)}`, 'Price']
-                : [`${val}`, 'Volume']
-            }
-            labelFormatter={(ts) => new Date(ts as number).toLocaleString()}
+          <Tooltip content={<CustomTooltip />} />
+
+          <Bar
+            yAxisId="volume"
+            dataKey={(entry) => entry.volume / 10000000}
+            barSize={2}
+            fill="#E2E4E7"
+            radius={[2, 2, 0, 0]}
+            layout="horizontal"
           />
 
-          {/* volume bars */}
-          
-          <Bar yAxisId="price" dataKey="price" barSize={4} fill="#E2E4E7" />
-
-          {/* shaded area under price */}
           <Area
             yAxisId="price"
             type="monotone"
@@ -111,7 +135,6 @@ export default function CombinedChart({ data }: Props) {
             fill="url(#priceGrad)"
           />
 
-          {/* price line */}
           <Line
             yAxisId="price"
             type="monotone"
@@ -121,35 +144,37 @@ export default function CombinedChart({ data }: Props) {
             strokeWidth={2}
           />
 
-          <ReferenceLine
-            yAxisId="price"
-            y={last.price}
-            stroke="#888"
-            strokeDasharray="3 3"
-          />
+          <ReferenceLine yAxisId="price" y={last.price} stroke="#888" strokeDasharray="3 3" />
+          <Customized
+            component={({ width, height, xAxisMap, yAxisMap, data }) => {
+              const priceAxis = yAxisMap['price'];
+              const xAxis = xAxisMap[0]; // assuming default X axis
 
-          <ReferenceDot
-            yAxisId="price"
-            x={last.timestamp}
-            y={last.price}
-            r={6}
-            fill="#4B40EE"
-            stroke="none"
-            label={() => {
-              const text = `$${last.price.toFixed(2)}`;
-              const pad = 6, fs = 12;
-              const w = text.length * fs * 0.6 + pad * 2;
-              const h = fs + pad;
+              const lastPoint = data[data.length - 1];
+
+              if (!lastPoint) return null;
+
+              const x = xAxis.scale(lastPoint.timestamp);
+              const y = priceAxis.scale(lastPoint.price);
+
+              console.log({ x, y });
+
+              const text = `$${lastPoint.price.toFixed(2)}`;
+              const fontSize = 14;
+              const padX = 8;
+              const padY = 4;
+              const textWidth = text.length * fontSize * 0.6 + padX * 2;
+              const chipHeight = fontSize + padY * 4;
+
               return (
-                <g transform={`translate(8,-${h})`}>
-                  <rect width={w} height={h} rx={4} fill="#5c6bc0" />
+                <g transform={`translate(${x - textWidth / 2}, ${y - chipHeight / 2})`}>
+                  <rect width={textWidth} height={chipHeight} rx={4} ry={4} fill="#4B40EE" />
                   <text
-                    x={pad}
-                    y={h / 2}
+                    x={padX}
+                    y={chipHeight / 2}
                     dominantBaseline="middle"
                     fill="#fff"
-                    fontSize={fs}
-                    fontFamily="Circular Std, sans-serif"
+                    fontSize={fontSize}
                   >
                     {text}
                   </text>

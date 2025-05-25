@@ -16,7 +16,7 @@ export const Price = styled.h1`
   font-weight: 400;
   margin: 0;
   padding: 0;
-  line-height: 100%;
+  line-height: 1;
 `;
 
 export const Change = styled.span<{ positive: boolean }>`
@@ -27,12 +27,15 @@ export const Change = styled.span<{ positive: boolean }>`
 
 export const PriceWithSymbol = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
+  vertical-align: top;
+  gap:0.25rem
 `;
 
 export const Symbol = styled.h4`
 color:#BDBEBF;
-font-weight: 400;
+font-weight: 500;
 font-size: 1.25rem;
-line-height: 100%;
+line-height: 2.2;
+
 `

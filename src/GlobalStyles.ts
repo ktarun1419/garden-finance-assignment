@@ -5,7 +5,7 @@ const GlobalStyles = createGlobalStyle`
 
   @font-face {
     font-family: 'Circular Std';
-    src: url('/fonts/circular-std-medium-500.ttf') format('truetype');
+    src: url('/fonts/CircularStd-Book.ttf') format('truetype');
   };
 
   /* Box sizing and reset of margins/paddings */

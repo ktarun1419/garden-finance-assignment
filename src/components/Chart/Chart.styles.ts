@@ -6,15 +6,21 @@ export const ControlsWrapper = styled.div`
   padding: 1rem 0rem;
 `;
 
-export const Toolbar = styled.div`
+export const Toolbar = styled.div<{ isFull: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: ${({ isFull }) => (isFull ? '100%' : '80%')} !important;
+   padding: ${({ isFull }) => (isFull ? '0 1rem' : '0')} !important;
 `;
 
+export const ToolbarRight = styled.div`
+  display: flex;
+  gap: 1.5rem;
+`;
 
 export const RangeButton = styled.button<{ active: boolean }>`
-  background: ${({ active }) => (active ? '#5c6bc0' : 'transparent')};
+  background: ${({ active }) => (active ? '#4B40EE' : 'transparent')};
   color: ${({ active }) => (active ? '#fff' : '#555')};
   border: none;
   padding: 0.5rem 0.75rem;
@@ -22,7 +28,7 @@ export const RangeButton = styled.button<{ active: boolean }>`
   border-radius: 4px;
 
   &:hover {
-    background: #5c6bc0;
+    background: #4b40ee;
     color: #fff;
   }
 `;
